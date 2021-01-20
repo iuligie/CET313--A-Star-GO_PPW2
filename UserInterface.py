@@ -1,7 +1,5 @@
-import asyncio
-import time
 import tkinter as tk
-from typing import List, Any
+from tkinter import messagebox
 
 import keyboard
 
@@ -134,6 +132,8 @@ class Game(tk.Tk):
                 print((self.x, self.y))
             else:
                 self.y = self.y - 1
+            if self.x == 18 and self.y == 13:
+                messagebox.showinfo("Congratulations! You WON", "YOU WON!\nYou reached the end of The Maze!")
         elif key == "space":
             self.display_path()
             print("SHOW PATH")
