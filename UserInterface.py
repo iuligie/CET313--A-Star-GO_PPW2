@@ -1,4 +1,9 @@
+import asyncio
+import time
 import tkinter as tk
+from typing import List, Any
+
+import keyboard
 
 Width = 30
 triangle_size = 0.1
@@ -35,6 +40,7 @@ specials = [(1, 7, "yellow", 1), (18, 13, "green", 1)]
 cell_scores = {}
 start = []
 specialcoords = []
+path_coordinates = []
 
 
 class Game(tk.Tk):
@@ -44,6 +50,7 @@ class Game(tk.Tk):
         self.can = tk.Canvas(self, width=x * Width, height=y * Width)
         self.can.pack(fill="both", expand=False)
         self.render_grid()
+        self.maxsize(604, 484)
 
         self.player = self.can.create_rectangle(player[0] * Width + Width * 2 / 10, player[1] * Width + Width * 2 / 10,
                                                 player[0] * Width + Width * 8 / 10, player[1] * Width + Width * 8 / 10,
@@ -52,16 +59,16 @@ class Game(tk.Tk):
         self.y = 7
         self.bind("<Key>", self.move_player)
         self.generateMaze()
-        self.resize(100)
+        self.resize(104)
 
     def resize(self, w):
         h = 484
         # width = 604
         # height = 484
-        if w >= 604:
-            print("WINDOW SIZE:" + str(w) + str(h))
-        else:
-            self.geometry(f"{w}x{h}")
+        # if w >= 620:
+        #   print("WINDOW SIZE:" + str(w) + str(h))
+        # else:
+        self.geometry(f"{w}x{h}")
 
     def render_grid(self):
         global specials, walls, Width, x, y, player
@@ -79,8 +86,14 @@ class Game(tk.Tk):
         for (i, j, c, w) in specials:
             specialcoords.append((j, i))
             self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill=c, width=1)
-        for (j, i) in coords:
-            self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="purple", width=1)
+        self.initialize_path()
+        self.hide_path()
+
+    def waithere(self):
+        var = tk.IntVar()
+        self.after(3000, var.set, 1)
+        print("waiting...")
+        self.wait_variable(var)
 
     def move_player(self, event):
         margin_right = 3
@@ -93,13 +106,12 @@ class Game(tk.Tk):
                 print((self.x, self.y))
             else:
                 self.x = self.x + 1
-
         elif key == "Right":
             self.x = self.x + 1
             print("(To The Right)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, 30, 0)
-                if self.x >= margin_right:
+                if self.x % margin_right == 0:
                     self.resize(self.winfo_width() + 100)
                     margin_right = margin_right * 2
                     print("(X, MARGIN RIGHT): -> (" + str(self.x) + " ," + str(margin_right) + ")")
@@ -122,6 +134,26 @@ class Game(tk.Tk):
                 print((self.x, self.y))
             else:
                 self.y = self.y - 1
+        elif key == "space":
+            self.display_path()
+            print("SHOW PATH")
+            self.waithere()
+            self.hide_path()
+
+    def initialize_path(self):
+        for (j, i) in coords:
+            temp = self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="purple",
+                                             width=1)
+            path_coordinates.append(temp)
+
+    def display_path(self):
+        for temp in path_coordinates:
+            self.can.itemconfig(temp, fill='purple')
+
+    def hide_path(self):
+        for temp in path_coordinates:
+            self.can.itemconfig(temp, fill='white')
+            # self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="white", width=1)
 
     def isValidMove(self):
         if (self.y, self.x) in walls:
