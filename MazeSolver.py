@@ -6,8 +6,8 @@ from simpleai.search import SearchProblem, astar
 # As I did the tutorial myself and the purpose was learning
 # I consider this to be my code, but it is inspired from
 # what I have been taught and tasked to do during the CET313 tutorials
-# Author: Emanuel Iulian Gheoghe
-# Project: A*GO - Professional Pracice Week 2
+# Author: Emanuel Iulian Gheorghe
+# Project: A*GO - Professional Practice Week 2
 # Module: CET313
 
 class MazeSolver(SearchProblem):
