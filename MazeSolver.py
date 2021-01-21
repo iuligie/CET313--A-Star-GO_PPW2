@@ -2,7 +2,17 @@ import math
 from simpleai.search import SearchProblem, astar
 
 
+# This codebase was inspired from one of the tutorials
+# As I did the tutorial myself and the purpose was learning
+# I consider this to be my code, but it is inspired from
+# what I have been taught and tasked to do during the CET313 tutorials
+# Author: Emanuel Iulian Gheoghe
+# Project: A*GO - Professional Pracice Week 2
+# Module: CET313
+
 class MazeSolver(SearchProblem):
+
+    # this function is initializing the grid (board) and the variables
     def __init__(self, board):
         self.board = board
         self.goal = (0, 0)
@@ -15,7 +25,7 @@ class MazeSolver(SearchProblem):
                     self.goal = (x, y)
         super(MazeSolver, self).__init__(initial_state=self.initial)
 
-    # define the method that takes actions
+    # this function is defining the method that takes actions
     # to arrive at the solution
     def actions(self, state):
         actions = []
@@ -25,10 +35,7 @@ class MazeSolver(SearchProblem):
                 actions.append(action)
         return actions
 
-    # def updateInitial(self):
-    #    self.initial = (1, 7)
-
-    # update state based on action
+    # updating state based on action
     def result(self, state, action):
         x, y = state
         if action.count("up"):
@@ -44,15 +51,15 @@ class MazeSolver(SearchProblem):
 
         return new_state
 
-    # Check if we have reached the goal
+    # Checking if the goal has been reached
     def is_goal(self, state):
         return state == self.goal
 
-    # compute cost of taking an action
+    # computing cost of taking an action
     def cost(self, state, action, state2):
         return COSTS[action]
 
-    # heuristic that we use to arrive at the solution
+    # heuristic that is used to arrive at the solution
     def heuristic(self, state):
         x, y = state
         gx, gy = self.goal
@@ -63,37 +70,12 @@ class MazeSolver(SearchProblem):
 if __name__ == "__main__":
     f = open("maze-map.txt", "r")
     # define map
-    # MAP = None
     MAP = f.read()
-    MAP= str(MAP)
     f.close()
-   #MAP = """
-   ################
-   #     #o   #   #
-   # ### #### # # #
-   # #   # #  # # #
-   # # ### # ## # #
-   # #     # #  # #
-   # ##### # #### #
-   # #   # #    # #
-   # # # # #### # #
-   #   # #    #   #
-   # ### #### #   #
-   #   # # ## ### #
-   # # # #  # # # #
-   # ### # #### # #
-   #   # #      # #
-   ### # # #### # #
-   #  x#   #      #
-   # # ###### #####
-   # #            #
-   ################
-   #"""
-    # convert map to list
-    print(MAP)
+    print(MAP)  # print map for debug purposes
     MAP = [list(x) for x in MAP.split("\n") if x]
 
-    # define cost of moving around the map
+    # defining cost of moving around the map
     cost_regular = 1.0
     cost_diagonal = 1.7
 
@@ -108,16 +90,18 @@ if __name__ == "__main__":
         "down left": cost_regular,
         "down right": cost_regular,
     }
-    # create maze solver object
+    # creating maze solver object
     problem = MazeSolver(MAP)
 
-    # run solver
+    # running solver
     result = astar(problem, graph_search=True)
 
-    # extract the path
+    # extracting the path
     path = [x[1] for x in result.path()]
+
+    # output file for the resulted path
     r = open("path-coord.txt", "w")
-    # print result
+    # print result for debug purposes
     print()
     for y in range(len(MAP)):
         for x in range(len(MAP[y])):
