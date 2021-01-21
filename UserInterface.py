@@ -60,7 +60,7 @@ class Game(tk.Tk):
         self.bind("<Key>", self.move_player)
         self.generateMaze()
         self.resize(104)
-        #messagebox.showinfo("Some tips before you go on", "Welcome!\nBefore you start, some advice:\nPRESS SPACEBAR to see clues on the path towards the EXIT!\nLucky you, you have unlimited clues!")
+        # messagebox.showinfo("Some tips before you go on", "Welcome!\nBefore you start, some advice:\nPRESS SPACEBAR to see clues on the path towards the EXIT!\nLucky you, you have unlimited clues!")
 
     def resize(self, w):
         h = 484
@@ -88,7 +88,7 @@ class Game(tk.Tk):
     def waithere(self):
         var = tk.IntVar()
         self.after(3000, var.set, 1)
-        #print("waiting...")
+        # print("waiting...")
         self.wait_variable(var)
 
     def move_player(self, event):
@@ -96,45 +96,45 @@ class Game(tk.Tk):
         key = event.keysym
         if key == "Left":
             self.x = self.x - 1
-            #print("(To The Left)is valid? -> " + str(self.isValidMove()))
+            # print("(To The Left)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, -30, 0)
-                #print((self.x, self.y))
+                # print((self.x, self.y))
             else:
                 self.x = self.x + 1
         elif key == "Right":
             self.x = self.x + 1
-            #print("(To The Right)is valid? -> " + str(self.isValidMove()))
+            # print("(To The Right)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, 30, 0)
                 if self.x % margin_right == 0:
                     self.resize(self.winfo_width() + 100)
                     margin_right = margin_right * 2
-                    #print("(X, MARGIN RIGHT): -> (" + str(self.x) + " ," + str(margin_right) + ")")
-                #print((self.x, self.y))
+                    # print("(X, MARGIN RIGHT): -> (" + str(self.x) + " ," + str(margin_right) + ")")
+                # print((self.x, self.y))
             else:
                 self.x = self.x - 1
         elif key == "Up":
             self.y = self.y - 1
-            #print("(To The Sky)is valid? -> " + str(self.isValidMove()))
+            # print("(To The Sky)is valid? -> " + str(self.isValidMove()))
             if (self.isValidMove()):
                 self.can.move(self.player, 0, -30)
-                #print((self.x, self.y))
+                # print((self.x, self.y))
             else:
                 self.y = self.y + 1
         elif key == "Down":
             self.y = self.y + 1
-            #print("(To The Floor)is valid? -> " + str(self.isValidMove()))
+            # print("(To The Floor)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, 0, 30)
-                #print((self.x, self.y))
+                # print((self.x, self.y))
             else:
                 self.y = self.y - 1
             if self.x == 18 and self.y == 13:
                 messagebox.showinfo("Congratulations! You WON", "YOU WON!\nYou reached the end of The Maze!")
         elif key == "space":
             self.display_path()
-            #print("SHOW PATH")
+            # print("SHOW PATH")
             self.waithere()
             self.hide_path()
 
@@ -155,23 +155,25 @@ class Game(tk.Tk):
 
     def isValidMove(self):
         if (self.y, self.x) in walls:
-            #print(self.x, self.y)
+            # print(self.x, self.y)
             return False
-        #print(self.x, self.y)
+        # print(self.x, self.y)
         return True
 
     def generateMaze(self):
         maze = ""
         for i in range(y):
             for j in range(x):
-                if (i, j) in specialcoords:
-                    maze = maze + "@"
+                if (i, j) == (13, 18):
+                    maze = maze + "x"
+                elif (i, j) == (7, 1):
+                    maze = maze + "o"
                 elif (i, j) in walls:
                     maze = maze + "#"
                 else:
                     maze = maze + " "
             maze = maze + "\n"
-        #print(maze)
+        # print(maze)
         f = open("maze-map.txt", "w")
         f.write(maze)
 
@@ -179,5 +181,5 @@ class Game(tk.Tk):
 if __name__ == '__main__':
     game = Game()
     c = open("maze-map.txt", "r")
-    #print(c.read())
+    # print(c.read())
     game.mainloop()

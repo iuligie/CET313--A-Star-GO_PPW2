@@ -65,6 +65,7 @@ if __name__ == "__main__":
     # define map
     # MAP = None
     MAP = f.read()
+    MAP= str(MAP)
     f.close()
    #MAP = """
    ################
