@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
+# Author: Emanuel Iulian Gheoghe
+# Project: A*GO - Professional Pracice Week 2
+# Module: CET313
+
 
 # variable declaration
 # uncommented declrarations indicate would have indication in their name
@@ -77,18 +81,14 @@ class Game(tk.Tk):
 
     # as the name suggests, this function is rendering the grid on the canvas
     def render_grid(self):
-        global specials, walls, Width, x, y, player
+        global specials, walls, Width, x, y
         for i in range(x):
             for j in range(y):
                 self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="white", width=1)
-                # f.write("x")
                 if (i == 0 or j == 0) or i == 19:
                     walls.append((j, i))
-                # self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="black", width=1)
-            # f.write("\n")
         for (j, i) in walls:
             self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill="black", width=1)
-        # f.write("#")
         for (i, j, c, w) in specials:
             specialcoords.append((j, i))
             self.can.create_rectangle(i * Width, j * Width, (i + 1) * Width, (j + 1) * Width, fill=c, width=1)
@@ -99,7 +99,6 @@ class Game(tk.Tk):
     def waithere(self):
         var = tk.IntVar()
         self.after(3000, var.set, 1)
-        # print("waiting...")
         self.wait_variable(var)
 
     # this function takes a system event such as a key press,
@@ -110,45 +109,35 @@ class Game(tk.Tk):
         key = event.keysym
         if key == "Left":
             self.x = self.x - 1
-            # print("(To The Left)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, -30, 0)
-                # print((self.x, self.y))
             else:
                 self.x = self.x + 1
         elif key == "Right":
             self.x = self.x + 1
-            # print("(To The Right)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, 30, 0)
                 if self.x % margin_right == 0:
                     self.resize(self.winfo_width() + 100)
                     margin_right = margin_right * 2
-                    # print("(X, MARGIN RIGHT): -> (" + str(self.x) + " ," + str(margin_right) + ")")
-                # print((self.x, self.y))
             else:
                 self.x = self.x - 1
         elif key == "Up":
             self.y = self.y - 1
-            # print("(To The Sky)is valid? -> " + str(self.isValidMove()))
             if (self.isValidMove()):
                 self.can.move(self.player, 0, -30)
-                # print((self.x, self.y))
             else:
                 self.y = self.y + 1
         elif key == "Down":
             self.y = self.y + 1
-            # print("(To The Floor)is valid? -> " + str(self.isValidMove()))
             if self.isValidMove():
                 self.can.move(self.player, 0, 30)
-                # print((self.x, self.y))
             else:
                 self.y = self.y - 1
             if self.x == 18 and self.y == 13:
                 messagebox.showinfo("Congratulations! You WON", "YOU WON!\nYou reached the end of The Maze!")
         elif key == "space":
             self.display_path()
-            # print("SHOW PATH")
             self.waithere()
             self.hide_path()
 
@@ -190,7 +179,6 @@ class Game(tk.Tk):
                 else:
                     maze = maze + " "
             maze = maze + "\n"
-        # print(maze)
         f = open("maze-map.txt", "w")
         f.write(maze)
 
